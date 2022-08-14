@@ -19,6 +19,10 @@
 #include <random>  // seed_seq
 #include <sstream>
 
+#if defined(BUILD_MONOLITHIC)
+#include "monolithic_examples.h"
+#endif
+
 #define UPDATE_GOLDEN 0
 #define ENABLE_VERIFY 1
 #define ENABLE_DUMP 0
@@ -311,7 +315,12 @@ void RunAll() {
 }  // namespace
 }  // namespace randen
 
-int main(int argc, char* argv[]) {
+
+#if defined(BUILD_MONOLITHIC)
+#define main      randen_test_main
+#endif
+
+int main(int argc, const char** argv) {
   randen::RunAll();
   return 0;
 }

@@ -13,12 +13,27 @@
 // limitations under the License.
 
 #include <stdio.h>
+#if !defined(_WIN32)
 #include <unistd.h>     // sleep
+#else
+#include <windows.h>
+/*
+ * Windows: although sleep() will be resolved by both MSVC and Mingw GCC
+ * linkers, the function is not declared in header files. This is
+ * because Windows' version of the function is called Sleep(), and it
+ * is declared in windows.h
+ */
+#define sleep(x)	(Sleep((x) * 1000), 0)
+#endif
 
 #include "nanobenchmark.h"
 #include "randen.h"
 #include "util.h"
 #include "vector128.h"
+
+#if defined(BUILD_MONOLITHIC)
+#include "monolithic_examples.h"
+#endif
 
 namespace randen {
 namespace {
@@ -105,7 +120,7 @@ void EnsureLongMeasurementFails(const FuncInput (&inputs)[N]) {
   RANDEN_CHECK(num_results == 0);
 }
 
-void RunAll(const int argc, char* argv[]) {
+void RunAll(const int argc, const char** argv) {
   // Avoid migrating between cores - important on multi-socket systems.
   int cpu = -1;
   if (argc == 2) {
@@ -127,7 +142,12 @@ void RunAll(const int argc, char* argv[]) {
 }  // namespace
 }  // namespace randen
 
-int main(int argc, char* argv[]) {
+
+#if defined(BUILD_MONOLITHIC)
+#define main      randen_nanobenchmark_test_main
+#endif
+
+int main(int argc, const char** argv) {
   randen::RunAll(argc, argv);
   return 0;
 }

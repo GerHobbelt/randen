@@ -27,6 +27,7 @@
 #include <string>
 #include <vector>
 
+
 // Architecture
 #if defined(__x86_64__) || defined(_M_X64)
 #define NB_ARCH_X86

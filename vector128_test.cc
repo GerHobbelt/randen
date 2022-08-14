@@ -17,6 +17,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if defined(BUILD_MONOLITHIC)
+#include "monolithic_examples.h"
+#endif
+
 namespace randen {
 namespace {
 
@@ -93,7 +97,12 @@ void RunAll() {
 }  // namespace
 }  // namespace randen
 
-int main(int argc, char* argv[]) {
+
+#if defined(BUILD_MONOLITHIC)
+#define main      randen_vector128_test_main
+#endif
+
+int main(int argc, const char** argv) {
   randen::RunAll();
   return 0;
 }

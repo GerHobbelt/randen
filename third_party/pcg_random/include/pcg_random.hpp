@@ -1155,7 +1155,7 @@ private:
 
     static constexpr size_t table_size  = 1UL << table_pow2;
     static constexpr size_t table_shift = stypebits - table_pow2;
-    static constexpr state_type table_mask =
+    static inline const state_type table_mask =
         (state_type(1U) << table_pow2) - state_type(1U);
 
     static constexpr bool   may_tick  =
@@ -1182,8 +1182,9 @@ private:
             // The low order bits of an MCG are constant, so drop them.
             state >>= 2;
         }
-        size_t index       = kdd ? state &  table_mask
-                                 : state >> table_shift;
+		auto _index = kdd ? state &  table_mask
+                          : state >> table_shift;
+		uint64_t index = _index.to_uint();
 
         if (may_tick) {
             bool tick = kdd ? (state & tick_mask) == state_type(0u)

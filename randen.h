@@ -29,6 +29,9 @@
 #include <ostream>
 #include <type_traits>
 
+#undef min
+#undef max
+
 // RANDen = RANDom generator or beetroots in Swiss German.
 namespace randen {
 

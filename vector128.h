@@ -18,7 +18,7 @@
 
 #include <stdint.h>     // uint64_t
 
-#if defined(__SSE2__) && defined(__AES__)
+#if defined(__AVX__) || (defined(__SSE2__) && defined(__AES__))
 
 #define RANDEN_AESNI 1
 #include <wmmintrin.h>

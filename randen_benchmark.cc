@@ -58,6 +58,10 @@
 #include "nanobenchmark.h"
 #include "util.h"
 
+#if defined(BUILD_MONOLITHIC)
+#include "monolithic_examples.h"
+#endif
+
 namespace randen {
 namespace {
 
@@ -335,7 +339,7 @@ void ForeachEngine(const int unpredictable1) {
   printf("\n");
 }
 
-void RunAll(int argc, char* argv[]) {
+void RunAll(int argc, const char** argv) {
   // Immediately output any results (for non-local runs).
   setvbuf(stdout, nullptr, _IONBF, 0);
 
@@ -360,7 +364,12 @@ void RunAll(int argc, char* argv[]) {
 }  // namespace
 }  // namespace randen
 
-int main(int argc, char* argv[]) {
+
+#if defined(BUILD_MONOLITHIC)
+#define main      randen_benchmark_main
+#endif
+
+int main(int argc, const char** argv) {
   randen::RunAll(argc, argv);
   return 0;
 }
